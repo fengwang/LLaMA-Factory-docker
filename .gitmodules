@@ -1,0 +1,3 @@
+[submodule "submodules/LLaMA-Factory"]
+	path = submodules/LLaMA-Factory
+	url = https://github.com/fengwang/LLaMA-Factory
