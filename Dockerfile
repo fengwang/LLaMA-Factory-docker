@@ -1,22 +1,20 @@
 # 1) install python3
 FROM ubuntu:jammy
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get clean && apt update -y && apt-get -y upgrade && apt-get install  -y python3
+RUN apt-get clean && apt update -y && apt-get -y upgrade && apt-get install  -y python3 curl build-essential python3.10-dev
 RUN apt-get install -y software-properties-common && add-apt-repository ppa:deadsnakes/ppa
-
-# 2) install pip
-RUN apt install -y curl
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3.10 -
 
-# 3) install cuda and cudnn
-RUN apt install -y nvidia-cuda-toolkit
+# 2) install cuda and cudnn
+RUN apt-get install -y linux-headers-$(uname -r)
 RUN  apt-key del 7fa2af80
-ADD  https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb .
-RUN  dpkg -i cuda-keyring_1.0-1_all.deb
-RUN apt update -y && apt install -y libcudnn8 libcudnn8-dev
+ADD  https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb .
+RUN  dpkg -i cuda-keyring_1.1-1_all.deb
 
-# 3) install pytorch
-RUN python3.10 -m pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1 --extra-index-url "https://download.pytorch.org/whl/cu118"
+RUN apt update -y && apt install -y cuda-toolkit-12-1 libcudnn9-cuda-12 libcudnn9-dev-cuda-12
+
+# 3) install necessary packages
+RUN python3.10 -m pip install torch torchvision torchaudio deepspeed xformers
 
 # 4) install requirements
 WORKDIR /tmp
@@ -30,6 +28,7 @@ COPY submodules/LLaMA-Factory/src /app/src
 COPY submodules/LLaMA-Factory/data /app/data
 COPY submodules/LLaMA-Factory/tests /app/tests
 COPY submodules/LLaMA-Factory/evaluation /app/evaluation
+
 
 # 6) clean to shrink image size
 RUN python3.10 -m pip cache purge
