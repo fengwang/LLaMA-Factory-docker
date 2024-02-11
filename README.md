@@ -45,6 +45,13 @@ Single GPU mode
 docker run --rm -it --gpus all  -v $(pwd)/models:/models -v $(pwd)/output:/output -v $(pwd)/datasets:/data llama-factory  python3.10 /app/src/train_bash.py  --stage sft   --do_train --model_name_or_path /models/chatglm3-6b --dataset alpaca_gpt4_en --dataset_dir /data   --template chatglm3   --finetuning_type lora  --lora_target query_key_value  --output_dir /output --overwrite_cache  --per_device_train_batch_size 4 --gradient_accumulation_steps 4  --lr_scheduler_type cosine --logging_steps 10   --save_steps 1000  --learning_rate 5e-5  --num_train_epochs 3.0 --plot_loss  --fp16
 ```
 
+Multiple GPU mode (8 GPU example)
+```bash
+docker run --rm -it --gpus all  -v $(pwd)/models:/models -v $(pwd)/output-chatglm3-6b:/output -v $(pwd)/dataset:/data -v $(pwd)/example:/config llama-factory deepspeed --num_gpus 8 --master_port=9901  /app/src/train_bash.py  --deepspeed '/config/ds_config.json'  --stage sft   --do_train --model_name_or_path /models/chatglm3-6b --dataset alpaca_gpt4_en --dataset_dir /data   --template chatglm3   --finetuning_type lora   --lora_target query_key_value  --output_dir /output --overwrite_cache  --per_device_train_batch_size 8 --gradient_accumulation_steps 1  --lr_scheduler_type cosine --logging_steps 10   --save_steps 100  --learning_rate 5e-5  --num_train_epochs 3.0 --plot_loss  --fp16   --warmup_steps 0  --lora_rank 64  --lora_dropout 0.1  --lora_target all
+```
+**remember to change the `--num_gpus` parameter and adjust the deepspeed [config file](./examples/ds_config.json) accordingly.**
+
+
 
 #### Merge lora weights
 
