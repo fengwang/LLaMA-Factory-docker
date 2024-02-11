@@ -1,4 +1,4 @@
-# Fine-tune LLaMA modles in a docker
+# Fine-tune LLaMA models in a docker
 
 ## Checkout and build the docker image
 
