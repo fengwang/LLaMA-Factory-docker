@@ -48,13 +48,14 @@ docker run --rm -it --gpus all  -v $(pwd)/models:/models -v $(pwd)/output:/outpu
 
 #### Merge lora weights
 
+TOVERIFY
 ```bash
 docker run --rm -it --gpus all  -v $(pwd)/models:/models -v $(pwd)/output:/output -v $(pwd)/merged_model:/new_model -v $(pwd)/datasets:/data llama-factory  python3.10 /app/src/export_model.py  --model_name_or_path /models/chatglm3-6b --adapter_name_or_path /output --template chatglm3 --finetuning_type lora --export_dir /new_model --export_size 2  --export_legacy_format False
 ```
 
 
 #### Test new model
-
+TODO
 ```bash
 ```
 
