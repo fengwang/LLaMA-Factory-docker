@@ -18,10 +18,10 @@ RUN python3.10 -m pip install torch torchvision torchaudio deepspeed xformers bi
 # 4) install requirements
 WORKDIR /tmp
 COPY submodules/LLaMA-Factory/requirements.txt /tmp/requirements.txt
-RUN sed -i '1d' /tmp/requirements.txt
+RUN sed -i 's/torch/#torch/g' /tmp/requirements.txt
 RUN python3.10 -m pip install -r /tmp/requirements.txt
 # extra attention goes to flash attention
-RUN python3.10 -m pip uninstall -y transformer-engine flash-attn ninja && python3.10 -m pip install --no-cache-dir flash-attn --no-build-isolation
+RUN apt-get install -y git && python3.10 -m pip uninstall -y transformer-engine flash-attn && MAX_JOBS=4 python3.10 -m pip install --no-cache-dir flash-attn --no-build-isolation
 
 # 5) copy workdir to /app
 WORKDIR /app
