@@ -5,7 +5,7 @@
 Build the image using [LLaMA-Factory source code](https://github.com/hiyouga/LLaMA-Factory)
 
 ```bash
-git clone --recursive-submodules https://github.com/fengwang/LLaMA-Factory-docker.git
+git clone --recurse-submodules https://github.com/fengwang/LLaMA-Factory-docker.git
 cd LLaMA-Factory-docker
 docker build --file ./Dockerfile . -t llama-factory
 ```
